@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  ots_db:
+    container_name: ots_db
+    hostname: ots_db
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=onetimesecret
+      - POSTGRES_PASSWORD=onetimesecret
+      - POSTGRES_DB=onetimesecret
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: on-failure
+    ports:
+      - "65432:5432"
+
+volumes:
+  pg_data:

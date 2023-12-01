@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  ots_app:
+    container_name: ots_app
+    image: ots_app_image
+    env_file:
+      - ../.env
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ots_db
+    command: ["/ots/scripts/run.sh"]
+
+  ots_db:
+    container_name: ots_db
+    hostname: ots_db
+    image: postgres:15-alpine
+    env_file:
+      - ../.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: on-failure
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg_data:

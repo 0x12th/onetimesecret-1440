@@ -1,0 +1,60 @@
+name: Tests
+
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches:
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    container: python:3.11.6
+    services:
+      ots_db:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: ots
+          POSTGRES_PASSWORD: ots
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          allow-prereleases: true
+      - uses: pdm-project/setup-pdm@v3
+        name: Set up PDM
+        with:
+          python-version: "3.11"
+          allow-python-prereleases: false
+          cache: true
+          cache-dependency-path: |
+            ./pdm.lock
+      - name: Install dependencies
+        run: pdm install -G:all
+      - name: Run tests
+        run: pdm run pytest
+      - name: Test coverage
+        run: pdm run pytest --cov=src --cov-fail-under=80
+      - name: Export total coverage
+        run: |
+          export TOTAL=$(pdm run coverage report --format=total)
+          echo "total=$TOTAL" >> $GITHUB_ENV
+      - name: Create badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 539a3c90f92bfc4707c73ea2fd910b65
+          filename: covbadge.json
+          label: Coverage
+          message: ${{ env.total }}%
+          minColorRange: 50
+          maxColorRange: 90
+          valColorRange: ${{ env.total }}

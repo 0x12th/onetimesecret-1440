@@ -1,0 +1,155 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Nikita Biryukov", email = "n.biryukov12@gmail.com"},
+]
+dependencies = [
+    "fastapi[all]>=0.104.1",
+    "alembic>=1.12.1",
+    "asyncpg>=0.29.0",
+    "redis>=5.0.1",
+    "sqlalchemy[asyncio]>=2.0.23",
+    "fastapi-limiter>=0.1.4",
+    "cryptography>=41.0.7",
+    "argon2-cffi>=23.1.0",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.3.1",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.10.0",
+    "pytest-env>=1.1.3",
+    "coverage>=7.3.2",
+    "httpx>=0.25.2",
+    "pytest-asyncio>=0.21.1",
+]
+lint = [
+    "mypy>=1.3.0",
+    "ruff>=0.0.272",
+]
+dev = [
+    "pre-commit>=3.3.2",
+    "isort>=5.12.0",
+    "types-passlib>=1.7.7.13",
+    "types-python-jose>=3.3.4.8",
+]
+
+[tool.ruff]
+src = ["src", "tests"]
+line-length = 88
+exclude = ["alembic/*"]
+select = [
+  "A", # flake8-builtins
+  "B", # flake8-bugbear
+  "BLE", # flake8-blind-except
+  "C4", # flake8-comprehensions
+  "C90", # mccabe
+  "D", # pydocstyle
+  "DTZ", # flake8-datetimez
+  "E", # pycodestyle errors
+  "ERA", # eradicate
+  "EXE", # flake8-executable
+  "F", # pyflakes
+  "G", # flake8-logging-format
+  "I", # isort
+  "ICN", # flake8-import-conventions
+  "ISC", # flake8-implicit-str-concat
+  "N", # pep8-naming
+  "PIE", # flake8-pie
+  "PLC", # pylint - convention
+  "PLE", # pylint - error
+  "PLW", # pylint - warning
+  "PTH", # flake8-use-pathlib
+  "Q", # flake8-quotes
+  "RET", # flake8-return
+  "RUF", # Ruff-specific rules
+  "S", # flake8-bandit
+  "SIM", # flake8-simplify
+  "T10", # flake8-debugger
+  "T20", # flake8-print
+  "TCH", # flake8-type-checking
+  "TID", # flake8-tidy-imports
+  "UP", # pyupgrade
+  "W", # pycodestyle - warning
+]
+ignore = [
+  "A003", # flake8-builtins - class attribute {name} is shadowing a python builtin
+  "B010", # flake8-bugbear - do not call setattr with a constant attribute value
+  "D100", # pydocstyle - missing docstring in public module
+  "D101", # pydocstyle - missing docstring in public class
+  "D102", # pydocstyle - missing docstring in public method
+  "D103", # pydocstyle - missing docstring in public function
+  "D104", # pydocstyle - missing docstring in public package
+  "D105", # pydocstyle - missing docstring in magic method
+  "D106", # pydocstyle - missing docstring in public nested class
+  "D107", # pydocstyle - missing docstring in __init__
+  "D202", # pydocstyle - no blank lines allowed after function docstring
+  "D203", # one-blank-line-before-class
+  "D205", # pydocstyle - 1 blank line required between summary line and description
+  "D213", # multi-line-summary-second-line
+  "D415", # pydocstyle - first line should end with a period, question mark, or exclamation point
+  "E501", # pycodestyle line too long, handled by black
+  "PLW2901", # pylint - for loop variable overwritten by assignment target
+  "RUF012", # Ruff-specific rule - annotated with classvar
+  "ISC001", # Ruff formatter incompatible,
+  "S101", # Assert
+]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = [
+  "classmethod",
+  "pydantic.root_validator",
+  "pydantic.validator",
+  "sqlalchemy.ext.declarative.declared_attr",
+  "sqlalchemy.orm.declared_attr.directive",
+  "sqlalchemy.orm.declared_attr",
+]
+
+[tool.ruff.isort]
+known-first-party = ["src", "tests"]
+
+
+[tool.mypy]
+packages = ["src", "tests"]
+plugins = "pydantic.mypy"
+python_version = "3.11"
+show_error_codes = true
+show_error_context = true
+pretty = true
+ignore_missing_imports = false
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+follow_imports_for_stubs = true
+show_absolute_path = true
+explicit_package_bases = true
+namespace_packages = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+explicit_package_bases = true
+namespace_packages = true
+
+[tool.pdm.scripts]
+start = "uvicorn src.main:app --reload"

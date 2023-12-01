@@ -1,0 +1,31 @@
+# Ignore Git related files and directories
+**/.git
+**/.gitignore
+
+# Ignore Visual Studio Code configuration files
+**/.vscode
+
+# Ignore code coverage reports
+**/coverage
+
+# Ignore environment files
+**/.env
+
+# Ignore Docker-related files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Ignore macOS system files
+**/.DS_Store
+
+# Ignore Python virtual environments
+**/venv
+**/.venv
+**/env
+
+# Ignore Python cache files
+**/__pycache__
+
+# Ignore Ruff cache files
+**/.ruff_cache
